@@ -5,21 +5,21 @@ resource "aws_cloudfront_origin_access_identity" "s3_oai" {
 resource "aws_cloudfront_distribution" "s3_dist" {
   origin {
     domain_name = aws_s3_bucket.s3_bucket.bucket_regional_domain_name
-    origin_id = "S3-${aws_s3_bucket.s3_bucket.bucket}"
+    origin_id   = "S3-${aws_s3_bucket.s3_bucket.bucket}"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.s3_oai.cloudfront_access_identity_path
     }
   }
 
-  enabled = true
+  enabled         = true
   is_ipv6_enabled = true
 
   default_root_object = "index.html"
 
   default_cache_behavior {
-    allowed_methods = ["GET", "HEAD"]
-    cached_methods = ["GET", "HEAD"]
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3-${aws_s3_bucket.s3_bucket.bucket}"
 
     forwarded_values {
