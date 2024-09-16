@@ -12,8 +12,23 @@ variable "aws_s3_bucket_name" {
   default = "jalvarez-resume-tf.com"
 }
 
-
 variable "source_files" {
   description = "Directory containing the files to be uploaded to S3"
   default     = "../../frontend/dist/frontend/browser"
+}
+
+variable "table_name" {
+  description = "Name for the DynamoDB table"
+  default     = "cloud-resume-data-tf"
+  # To change in final ver
+}
+
+variable "lambda_table_path" {
+  description = "Path to Lambda Table Function"
+  default     = "../../backend/lambda/lambda_function.zip"
+}
+
+variable "lambda_basic_execution_role_arn" {
+  description = "ARN for Lambda basic execution role"
+  default     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
