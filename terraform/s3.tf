@@ -35,23 +35,9 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
         Principal = {
           AWS = aws_cloudfront_origin_access_identity.s3_oai.iam_arn
         },
-        Action = "s3:GetObject",
+        Action   = "s3:GetObject",
         Resource = "${aws_s3_bucket.s3_bucket.arn}/*"
       }
     ]
   })
-}
-
-resource "aws_s3_object" "s3_provision_dist_files" {
-  bucket = aws_s3_bucket.s3_bucket.bucket
-  for_each = fileset("${var.source_files}/", "**/*")
-
-  key         = each.value
-  source      = "${var.source_files}/${each.value}"
-  
-  content_type = lookup({
-    "html" = "text/html",
-    "css"  = "text/css",
-    "js"   = "application/javascript",
-  }, regex("\\.([a-zA-Z0-9]+)$", each.value)[0], "application/octet-stream")
 }
