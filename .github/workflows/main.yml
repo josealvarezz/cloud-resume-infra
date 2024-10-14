@@ -1,0 +1,58 @@
+name: Terraform Check & Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pages: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: eu-west-3
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_TF }}
+
+      - name: Checkout backend repo
+        uses: actions/checkout@v4
+        with:
+          repository: josealvarezz/cloud-resume-backend
+          ref: main
+          path: backend-repo
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Lamdba zip
+        run: |
+          cd backend-repo/lambda
+          zip -r lambda_function.zip lambda_function.py
+      - name: Copy Lambda zip
+        run: cp backend-repo/lambda/lambda_function.zip terraform/
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: terraform
+        run: |
+          terraform init
+          terraform plan -out=tfplan
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -auto-approve tfplan
