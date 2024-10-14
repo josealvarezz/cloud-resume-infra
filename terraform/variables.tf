@@ -25,7 +25,7 @@ variable "table_name" {
 
 variable "lambda_table_path" {
   description = "Path to Lambda Table Function"
-  default     = "../../backend/lambda/lambda_function.zip"
+  default     = "lambda_function.zip"
 }
 
 variable "lambda_basic_execution_role_arn" {
