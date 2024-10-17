@@ -45,11 +45,11 @@ resource "aws_iam_role_policy_attachment" "LambdaDynamoDBPolicyAttachment" {
 
 resource "aws_lambda_function" "lambda_table_test_tf" {
   function_name    = "LambdaTableTestTF"
-  filename         = var.lambda_table_path
+  filename         = local.lambda_table_path
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   role             = aws_iam_role.LambdaDynamoDBRoleTF.arn
-  source_code_hash = filebase64sha256(var.lambda_table_path)
+  source_code_hash = filebase64sha256(local.lambda_table_path)
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {

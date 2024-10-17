@@ -1,5 +1,8 @@
 name: Terraform Check & Build
 
+env:
+  TF_VAR_is_github_actions: "true"
+
 on:
   push:
     branches:
@@ -53,6 +56,7 @@ jobs:
         run: |
           terraform init
           terraform plan -out=tfplan
+
       - name: Terraform Apply
         working-directory: terraform
         run: terraform apply -auto-approve tfplan

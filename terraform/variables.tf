@@ -23,12 +23,23 @@ variable "table_name" {
   # To change in final ver
 }
 
-variable "lambda_table_path" {
+variable "lambda_table_path_local" {
   description = "Path to Lambda Table Function"
-  default     = "lambda_function.zip"
+  default     = "../../backend/lambda/lambda_function.zip"
+}
+
+variable "lambda_table_path_ga" {
+  description = "Path to Lambda Table Function when called through Github Actions"
+  default = "lambda_function.zip"
 }
 
 variable "lambda_basic_execution_role_arn" {
   description = "ARN for Lambda basic execution role"
   default     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+variable "is_github_actions" {
+  description = "Flag to identify if running from GitHub Actions"
+  type        = bool
+  default     = false
 }
