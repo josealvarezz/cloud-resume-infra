@@ -26,6 +26,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          repository: josealvarezz/cloud-resume-infra
+          ref: main
 
       - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3
