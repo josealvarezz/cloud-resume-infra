@@ -10,6 +10,10 @@ on:
   pull_request:
     branches:
       - main
+  workflow_call:
+    secrets:
+      AWS_ROLE_TO_ASSUME_TF:
+        required: true
 
 jobs:
   terraform:
@@ -60,3 +64,10 @@ jobs:
       - name: Terraform Apply
         working-directory: terraform
         run: terraform apply -auto-approve tfplan
+
+      - name: Terraform Output
+        id: tf_output
+        working-directory: terraform
+        run: |
+          echo "api_gateway_url=$(terraform output -raw api_gateway_url)" >> $GITHUB_ENV
+          echo "s3_bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_ENV
